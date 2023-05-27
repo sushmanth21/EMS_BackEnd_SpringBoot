@@ -30,8 +30,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 		Employee employee = new Employee();
 		
-		employee.setEmployeeId(employeeDto.getEmployeeId());
-		employee.setEmployeeName(employeeDto.getEmployeeName());
+		employee.setId(employeeDto.getId());
+		employee.setName(employeeDto.getName());
 		employee.setGender(employeeDto.getGender());
 		employee.setAge(employeeDto.getAge());
 		employee.setState(employeeDto.getState());
@@ -43,9 +43,9 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 
 	@Override
-	public String editEmployee(Integer employeeId, EmployeeDTO employeeDto) throws EmployeeException {
+	public String editEmployee(Integer id, EmployeeDTO employeeDto) throws EmployeeException {
 		
-		Optional<Employee> optional = employeeRepositary.findById(employeeId);
+		Optional<Employee> optional = employeeRepositary.findById(id);
 		
 		if(optional.isEmpty()) {
 			throw new EmployeeException("Service.EMPLOYEE_NOT_FOUND");
@@ -53,7 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService{
 		
 		Employee employee = optional.get();
 		
-		employee.setEmployeeName(employeeDto.getEmployeeName());
+		employee.setName(employeeDto.getName());
 		employee.setGender(employeeDto.getGender());
 		employee.setAge(employeeDto.getAge());
 		employee.setState(employeeDto.getState());
@@ -65,15 +65,15 @@ public class EmployeeServiceImpl implements EmployeeService{
 	}
 
 	@Override
-	public String deleteEmployee(Integer employeeId) throws EmployeeException {
+	public String deleteEmployee(Integer id) throws EmployeeException {
 		
-		Optional<Employee> optional = employeeRepositary.findById(employeeId);
+		Optional<Employee> optional = employeeRepositary.findById(id);
 		
 		if(optional.isEmpty()) {
 			throw new EmployeeException("Service.EMPLOYEE_NOT_FOUND");
 		}
 		
-		employeeRepositary.deleteById(employeeId);
+		employeeRepositary.deleteById(id);
 		
 		String str = environment.getProperty("Service.DELETE");
 		return str;
@@ -92,8 +92,8 @@ public class EmployeeServiceImpl implements EmployeeService{
 		for(Employee employee : list) {
 			EmployeeDTO employeeDto = new EmployeeDTO();
 			
-			employeeDto.setEmployeeId(employee.getEmployeeId());
-			employeeDto.setEmployeeName(employee.getEmployeeName());
+			employeeDto.setId(employee.getId());
+			employeeDto.setName(employee.getName());
 			employeeDto.setGender(employee.getGender());
 			employeeDto.setAge(employee.getAge());
 			employeeDto.setState(employee.getState());
@@ -101,5 +101,27 @@ public class EmployeeServiceImpl implements EmployeeService{
 			employeesList.add(employeeDto);
 		}
 		return employeesList;
+	}
+
+	@Override
+	public EmployeeDTO getEmployeeById(Integer id) throws EmployeeException {
+		
+		Optional<Employee> optional = employeeRepositary.findById(id);
+		
+		if(optional.isEmpty()) {
+			throw new EmployeeException("Service.EMPLOYEE_NOT_FOUND");
+		}
+		
+		Employee employee = optional.get();
+		
+		EmployeeDTO employeeDto = new EmployeeDTO();
+		
+		employeeDto.setId(employee.getId());
+		employeeDto.setName(employee.getName());
+		employeeDto.setGender(employee.getGender());
+		employeeDto.setAge(employee.getAge());
+		employeeDto.setState(employee.getState());
+
+		return employeeDto;
 	}
 }

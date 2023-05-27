@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import com.sush.dto.EmployeeDTO;
 import com.sush.exception.EmployeeException;
 import com.sush.service.EmployeeService;
 
+@CrossOrigin(origins = "http://localhost:4200/")
 @RestController
 @RequestMapping(value = "/api")
 public class EmployeeController {
@@ -44,12 +46,12 @@ public class EmployeeController {
 		}
 	}
 	
-	@PutMapping(value = "/EditEmployee/{employeeId}")
-	public ResponseEntity<String> editEmployee(@PathVariable Integer employeeId, @RequestBody EmployeeDTO employeeDto){
+	@PutMapping(value = "/EditEmployee/{id}")
+	public ResponseEntity<String> editEmployee(@PathVariable Integer id, @RequestBody EmployeeDTO employeeDto){
 		
 		String msg;
 		try {
-			msg = employeeService.editEmployee(employeeId, employeeDto);
+			msg = employeeService.editEmployee(id, employeeDto);
 			return new ResponseEntity<String>(msg, HttpStatus.ACCEPTED);
 		}
 		catch (EmployeeException e){
@@ -58,12 +60,12 @@ public class EmployeeController {
 		}
 	}
 	
-	@DeleteMapping(value = "/DeleteEmployee/{employeeId}")
-	public ResponseEntity<String> deleteEmployee(@PathVariable Integer employeeId){
+	@DeleteMapping(value = "/DeleteEmployee/{id}")
+	public ResponseEntity<String> deleteEmployee(@PathVariable Integer id){
 		
 		String msg;
 		try {
-			msg = employeeService.deleteEmployee(employeeId);
+			msg = employeeService.deleteEmployee(id);
 			return new ResponseEntity<String>(msg, HttpStatus.OK);
 		}
 		catch (EmployeeException e){
@@ -72,7 +74,7 @@ public class EmployeeController {
 		}
 	}
 	
-	@GetMapping(value = "/ViewEmployees")
+	@GetMapping(value = "/GetEmployees")
 	public ResponseEntity<List<EmployeeDTO>> getEmployees(){
 		
 		List<EmployeeDTO> list;
@@ -82,6 +84,20 @@ public class EmployeeController {
 		}
 		catch (EmployeeException e){
 			String str = environment.getProperty("Api.EMPLOYEES_NOT_FOUND");
+			throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, str);
+		}
+	}
+	
+	@GetMapping(value = "/GetEmployee/{id}")
+	public ResponseEntity<EmployeeDTO> getEmployeesById(@PathVariable Integer id){
+		
+		EmployeeDTO msg;
+		try {
+			msg = employeeService.getEmployeeById(id);
+			return new ResponseEntity<EmployeeDTO>(msg, HttpStatus.OK);
+		}
+		catch (EmployeeException e){
+			String str = environment.getProperty("Api.EMPLOYEE_NOT_FOUND");
 			throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, str);
 		}
 	}

@@ -8,7 +8,8 @@ import com.sush.exception.EmployeeException;
 public interface EmployeeService {
 
 	public String addEmployee(EmployeeDTO employeeDto) throws EmployeeException;
-	public String editEmployee(Integer employeeId, EmployeeDTO employeeDto) throws EmployeeException;
-	public String deleteEmployee(Integer employeeId) throws EmployeeException;
+	public String editEmployee(Integer id, EmployeeDTO employeeDto) throws EmployeeException;
+	public String deleteEmployee(Integer id) throws EmployeeException;
 	public List<EmployeeDTO> getEmployee() throws EmployeeException;
+	public EmployeeDTO getEmployeeById(Integer id) throws EmployeeException;
 }

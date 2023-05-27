@@ -3,8 +3,8 @@ create database spring_boot;
 use spring_boot;
 
 create table employee(
-    employee_id int AUTO_INCREMENT primary key,
-    employee_name varchar(20),
+    id int AUTO_INCREMENT primary key,
+    name varchar(20),
     gender varchar(10),
     age int,
     state varchar(20)
